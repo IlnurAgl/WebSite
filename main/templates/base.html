@@ -64,12 +64,10 @@
         <div class="col-md-4">
           <div class="content-section">
             <h3>Сайдбар</h3>
-            <p class='text-muted'>Информация о сайте.
+            <p class='text-muted'>Сортировка:
               <ul class="list-group">
-                <li class="list-group-item list-group-item-light">Последнии посты</li>
-                <li class="list-group-item list-group-item-light">Объявления</li>
-                <li class="list-group-item list-group-item-light">Календарь</li>
-                <li class="list-group-item list-group-item-light">Остальное</li>
+                <li class="list-group-item list-group-item-light"><a class="sort" href="{{ url_for('main.home') }}">От новых к старым</a></li>
+                <li class="list-group-item list-group-item-light"><a class="sort" href="{{ url_for('main.home_reverse') }}">От старых к новым</a></li>
               </ul>
             </p>
           </div>
