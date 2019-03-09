@@ -94,17 +94,15 @@ def user_posts(username):
     posts = Post.query.filter_by(author=user)\
         .order_by(Post.date_posted.desc())\
         .paginate(page=page, per_page=5)
-    return render_template('user_posts.html', posts=posts, user=user)
+    return render_template('user_posts.html', posts=posts, user=user, forUser=True, reverse=False)
 
 
 @users.route("/user_reverse/<string:username>")
 def user_reverse_posts(username):
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
-    posts = Post.query.filter_by(author=user)\
-        .order_by(Post.date_posted.desc())\
-        .paginate(page=page, per_page=5)
-    return render_template('user_posts_reverse.html', posts=posts, user=user)
+    posts = Post.query.filter_by(author=user).paginate(page=page, per_page=5)
+    return render_template('user_posts.html', posts=posts, user=user, forUser=True, reverse=True)
 
 
 # Страница для изменения пароля

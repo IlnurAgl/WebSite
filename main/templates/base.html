@@ -66,8 +66,13 @@
             <h3>Сайдбар</h3>
             <p class='text-muted'>Сортировка:
               <ul class="list-group">
-                <li class="list-group-item list-group-item-light"><a class="sort" href="{{ url_for('main.home') }}">От новых к старым</a></li>
-                <li class="list-group-item list-group-item-light"><a class="sort" href="{{ url_for('main.home_reverse') }}">От старых к новым</a></li>
+                {% if forUser %}
+                  <li class="list-group-item list-group-item-light"><a class="sort" href="{{ url_for('users.user_posts', username=user.username) }}">От новых к старым</a></li>
+                  <li class="list-group-item list-group-item-light"><a class="sort" href="{{ url_for('users.user_reverse_posts', username=user.username) }}">От старых к новым</a></li>
+                {% else %}
+                  <li class="list-group-item list-group-item-light"><a class="sort" href="{{ url_for('main.home') }}">От новых к старым</a></li>
+                  <li class="list-group-item list-group-item-light"><a class="sort" href="{{ url_for('main.home_reverse') }}">От старых к новым</a></li>
+                {% endif %}
               </ul>
             </p>
           </div>
