@@ -55,5 +55,10 @@
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
         </form>
+        {% if admin %}
+            <a href="{{ url_for('posts.posts_edit') }}">Редактирование постов</a>
+            <br>
+            <a href="{{ url_for('users.users_edit') }}">Редактирование пользователей</a>
+        {% endif %}
     </div>
 {% endblock content %}

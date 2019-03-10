@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, request
+from flask import Blueprint, redirect, request, abort
 from flask import render_template, url_for, flash
 from flask_login import login_user, current_user, logout_user, login_required
 from main import db, bcrypt
@@ -12,6 +12,8 @@ from main.users.utils import save_picture, send_reset_email
 
 # Подключение файла
 users = Blueprint('users', __name__)
+
+ADMINS = ['11']
 
 
 # Сайт для регистрации
@@ -82,8 +84,12 @@ def account():
         form.email.data = current_user.email
     image_file = url_for(
         'static', filename='profile_pics/' + current_user.image_file)
-    return render_template('account.html', title='Аккаунт',
-                           image_file=image_file, form=form)
+    if str(current_user.id) in ADMINS:
+        return render_template('account.html', title='Аккаунт',
+         image_file=image_file, form=form, admin=True)
+    else:
+        return render_template('account.html', title='Аккаунт',
+         image_file=image_file, form=form, admin=False)
 
 
 # Загрузка информации о пользователи
@@ -127,7 +133,7 @@ def reset_token(token):
         return redirect(url_for('main.home'))
     user = User.verify_reset_token(token)
     if user is None:
-        flash('Невырный запрос', 'warning')
+        flash('Неверный запрос', 'warning')
         return redirect(url_for('users.reset_request'))
     form = ResetPasswordForm()
     if form.validate_on_submit():
@@ -138,3 +144,23 @@ def reset_token(token):
         flash('Ваш пароль измененен! Вы можете войти в аккаунт', 'success')
         return redirect(url_for('users.login'))
     return render_template('reset_token.html', title='Изменить пароль', form=form)
+
+
+@users.route('/users_edit')
+def users_edit():
+    if str(current_user.id) not in ADMINS:
+        abort(403)
+    else:
+        return render_template('users_edit.html', users=User.query.all(), Post=Post)
+
+
+@users.route('/user_del/int:<user_id>')
+@login_required
+def user_del(user_id):
+    if str(current_user.id) not in ADMINS:
+        abort(403)
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    flash('Пользователь удален!', 'success')
+    return redirect(url_for('users.users_edit'))

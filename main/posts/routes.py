@@ -9,6 +9,7 @@ from main.posts.forms import PostForm
 # Подключение файла
 posts = Blueprint('posts', __name__)
 
+ADMINS = ['11']
 
 # Сайт для создания нового поста
 @posts.route("/post/new", methods=['GET', 'POST'])
@@ -64,3 +65,23 @@ def delete_post(post_id):
     db.session.commit()
     flash('Ваш пост был удален!', 'success')
     return redirect(url_for('main.home'))
+
+
+@posts.route('/posts_edit')
+def posts_edit():
+    if str(current_user.id) not in ADMINS:
+        abort(403)
+    else:
+        return render_template('posts_edit.html', posts=Post.query.all())
+
+
+@posts.route('/post_del/int:<post_id>')
+@login_required
+def post_del(post_id):
+    if str(current_user.id) not in ADMINS:
+        abort(403)
+    post = Post.query.get_or_404(post_id)
+    db.session.delete(post)
+    db.session.commit()
+    flash('Пост был удален!', 'success')
+    return redirect(url_for('posts.posts_edit'))

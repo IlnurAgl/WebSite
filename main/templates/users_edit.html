@@ -1,0 +1,27 @@
+<!-- Страница для изменений записей (для администраторов) -->
+{% extends "base.html" %}
+{% block content %}
+<table class="table table-hover">
+  	<thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Имя пользователя</th>
+      <th scope="col">Почта</th>
+      <th scope="col">Картинка</th>
+      <th class="col">Количетсов постов</th>
+      <th class="col">Удалить пользователя</th>
+    </tr>
+  	</thead>
+  	<tbody>
+	{% for user in users %}
+		<td>{{ user.id }}</td>
+		<td>{{ user.username }}</td>
+		<td>{{ user.email }}</td>
+		<td>{{ user.image_file }}</td>
+		<td>{{ Post.query.filter_by(author=user).paginate().total }}</td>
+		<td><a href="{{ url_for('users.user_del', user_id=user.id) }}">x</a></td>
+	</tr>
+	{% endfor %}
+	</tbody>
+</table>
+{% endblock content %}

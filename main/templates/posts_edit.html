@@ -1,0 +1,27 @@
+<!-- Страница для изменений записей (для администраторов) -->
+{% extends "base.html" %}
+{% block content %}
+<table class="table table-hover">
+    <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Заголовок</th>
+      <th scope="col">Дата</th>
+      <th scope="col">Id пользователя</th>
+      <th>Содержание</th>
+      <th>Удалить пост</th>
+    </tr>
+    </thead>
+    <tbody>
+  {% for post in posts %}
+    <td>{{ post.id }}</td>
+    <td>{{ post.title }}</td>
+    <td>{{ post.date_posted }}</td>
+    <td>{{ post.user_id }}</td>
+    <td><a href="{{ url_for('posts.post', post_id=post.id) }}">Ссылка на пост</a></td>
+    <td><a href="{{ url_for('posts.post_del', post_id=post.id) }}">x</a></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}
