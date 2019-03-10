@@ -17,7 +17,8 @@ ADMINS = ['11']
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data, content=form.content.data, author=current_user)
+        post = Post(title=form.title.data,
+                    content=form.content.data, author=current_user)
         db.session.add(post)
         db.session.commit()
         flash('Ваш пост был создан!', 'success')
@@ -67,6 +68,7 @@ def delete_post(post_id):
     return redirect(url_for('main.home'))
 
 
+# Страница для изменения поста для администратора
 @posts.route('/posts_edit')
 def posts_edit():
     if str(current_user.id) not in ADMINS:
@@ -75,6 +77,7 @@ def posts_edit():
         return render_template('posts_edit.html', posts=Post.query.all())
 
 
+# Удаление поста для администратора
 @posts.route('/post_del/int:<post_id>')
 @login_required
 def post_del(post_id):

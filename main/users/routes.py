@@ -146,6 +146,7 @@ def reset_token(token):
     return render_template('reset_token.html', title='Изменить пароль', form=form)
 
 
+# Страница для простомотора пользователей для администратора
 @users.route('/users_edit')
 def users_edit():
     if str(current_user.id) not in ADMINS:
@@ -154,6 +155,7 @@ def users_edit():
         return render_template('users_edit.html', users=User.query.all(), Post=Post)
 
 
+# Страница для удаления пользователя для администратора
 @users.route('/user_del/int:<user_id>')
 @login_required
 def user_del(user_id):
