@@ -162,6 +162,10 @@ def user_del(user_id):
     if str(current_user.id) not in ADMINS:
         abort(403)
     user = User.query.get_or_404(user_id)
+    posts = Post.query.filter_by(author=user)
+    for i in posts:
+        post = Post.query.get_or_404(i.id)
+        db.session.delete(post)
     db.session.delete(user)
     db.session.commit()
     flash('Пользователь удален!', 'success')
